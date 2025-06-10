@@ -43,6 +43,19 @@
     }
     body {
         @apply bg-background text-foreground font-roboto-flex;
+        cursor: none; /* Hide default cursor */
+    }
+    
+    /* Hide cursor on all elements */
+    * {
+        cursor: none !important;
+    }
+    
+    /* Show default cursor on mobile devices */
+    @media (max-width: 768px) {
+        body, * {
+            cursor: auto !important;
+        }
     }
 }
 

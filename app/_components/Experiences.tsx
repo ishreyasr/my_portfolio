@@ -4,33 +4,13 @@ import { MY_EXPERIENCE } from '../../lib/data';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const Experiences = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-
-    useGSAP(
-        () => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top 60%',
-                    end: 'bottom 50%',
-                    toggleActions: 'restart none none reverse',
-                    scrub: 1,
-                },
-            });
-
-            tl.from('.experience-item', {
-                y: 50,
-                opacity: 0,
-                stagger: 0.3,
-            });
-        },
-        { scope: containerRef },
-    );
+    const [hoveredExperience, setHoveredExperience] = useState<string | null>(null);
 
     useGSAP(
         () => {
@@ -51,6 +31,14 @@ const Experiences = () => {
         { scope: containerRef },
     );
 
+    const handleExperienceHover = (title: string) => {
+        setHoveredExperience(title);
+    };
+
+    const handleExperienceLeave = () => {
+        setHoveredExperience(null);
+    };
+
     return (
         <section className="py-section" id="my-experience">
             <div className="container" ref={containerRef}>
@@ -58,11 +46,20 @@ const Experiences = () => {
 
                 <div className="grid gap-14">
                     {MY_EXPERIENCE.map((item) => (
-                        <div key={item.title} className="experience-item">
+                        <div 
+                            key={item.title} 
+                            className="experience-item transition-all duration-300 cursor-pointer"
+                            onMouseEnter={() => handleExperienceHover(item.title)}
+                            onMouseLeave={handleExperienceLeave}
+                        >
                             <p className="text-xl text-muted-foreground">
                                 {item.company}
                             </p>
-                            <p className="text-5xl font-anton leading-none mt-3.5 mb-2.5">
+                            <p className={`text-5xl font-anton leading-none mt-3.5 mb-2.5 transition-all duration-300 ${
+                                hoveredExperience === item.title
+                                    ? 'text-primary'
+                                    : 'text-foreground'
+                            }`}>
                                 {item.title}
                             </p>
                             <p className="text-lg text-muted-foreground">

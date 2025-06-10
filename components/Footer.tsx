@@ -29,7 +29,7 @@ const Footer = ({ repoStats }: FooterProps) => {
 
                 <div className="">
                     <a
-                        href="https://github.com/shreyas162004/portfolio-2.0"
+                        href="https://github.com/shreyas162004/my_portfolio"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="leading-none text-muted-foreground hover:underline hover:text-white"

@@ -5,38 +5,13 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import Image from 'next/image';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const Skills = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-
-    useGSAP(
-        () => {
-            const slideUpEl =
-                containerRef.current?.querySelectorAll('.slide-up');
-
-            if (!slideUpEl?.length) return;
-
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top 80%',
-                    end: 'bottom 80%',
-                    scrub: 0.5,
-                },
-            });
-
-            tl.from('.slide-up', {
-                opacity: 0,
-                y: 40,
-                ease: 'none',
-                stagger: 0.4,
-            });
-        },
-        { scope: containerRef },
-    );
+    const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
     useGSAP(
         () => {
@@ -57,6 +32,14 @@ const Skills = () => {
         { scope: containerRef },
     );
 
+    const handleSkillHover = (skillName: string) => {
+        setHoveredSkill(skillName);
+    };
+
+    const handleSkillLeave = () => {
+        setHoveredSkill(null);
+    };
+
     return (
         <section id="my-stack" ref={containerRef}>
             <div className="container">
@@ -66,7 +49,7 @@ const Skills = () => {
                     {Object.entries(MY_STACK).map(([key, value]) => (
                         <div className="grid sm:grid-cols-12" key={key}>
                             <div className="sm:col-span-5">
-                                <p className="slide-up text-5xl font-anton leading-none text-muted-foreground uppercase">
+                                <p className="text-5xl font-anton leading-none text-muted-foreground uppercase">
                                     {key}
                                 </p>
                             </div>
@@ -74,19 +57,35 @@ const Skills = () => {
                             <div className="sm:col-span-7 flex gap-x-11 gap-y-9 flex-wrap">
                                 {value.map((item) => (
                                     <div
-                                        className="slide-up flex gap-3.5 items-center leading-none"
+                                        className={`flex gap-3.5 items-center leading-none transition-all duration-300 ${
+                                            hoveredSkill && hoveredSkill !== item.name
+                                                ? 'opacity-40 scale-90 blur-[1px]'
+                                                : hoveredSkill === item.name
+                                                ? 'opacity-100 scale-110 z-10'
+                                                : 'opacity-100 scale-100'
+                                        }`}
                                         key={item.name}
+                                        onMouseEnter={() => handleSkillHover(item.name)}
+                                        onMouseLeave={handleSkillLeave}
                                     >
-                                        <div>
+                                        <div className="transition-transform duration-300">
                                             <Image
                                                 src={item.icon}
                                                 alt={item.name}
                                                 width="40"
                                                 height="40"
-                                                className="max-h-10"
+                                                className={`max-h-10 transition-all duration-300 ${
+                                                    hoveredSkill === item.name
+                                                        ? 'scale-125 drop-shadow-lg'
+                                                        : ''
+                                                }`}
                                             />
                                         </div>
-                                        <span className="text-2xl capitalize">
+                                        <span className={`text-2xl capitalize transition-all duration-300 ${
+                                            hoveredSkill === item.name
+                                                ? 'text-primary font-semibold'
+                                                : ''
+                                        }`}>
                                             {item.name}
                                         </span>
                                     </div>

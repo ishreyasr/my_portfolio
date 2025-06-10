@@ -3,7 +3,6 @@
 import { ReactLenis } from 'lenis/react';
 import { ReactNode } from 'react';
 import Navbar from './Navbar';
-import CustomCursor from './CustomCursor';
 import Preloader from './Preloader';
 import ScrollProgressIndicator from './ScrollProgressIndicator';
 import ParticleBackground from './ParticleBackground';
@@ -31,7 +30,6 @@ export default function AppContent({ children }: Props) {
                     {children}
                 </main>
                 <FooterStats />
-                <CustomCursor />
                 <Preloader />
                 <ScrollProgressIndicator />
                 <ParticleBackground />
