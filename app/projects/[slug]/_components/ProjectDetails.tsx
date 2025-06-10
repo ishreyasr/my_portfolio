@@ -138,7 +138,7 @@ const ProjectDetails = ({ project }: Props) => {
                                     Year
                                 </p>
 
-                                <div className="text-lg">{project.year}</div>
+                                <div className="text-lg">{project.year || 'N/A'}</div>
                             </div>
                             <div className="fade-in-later">
                                 <p className="text-muted-foreground font-anton mb-3">
@@ -146,7 +146,7 @@ const ProjectDetails = ({ project }: Props) => {
                                 </p>
 
                                 <div className="text-lg">
-                                    {project.techStack.join(', ')}
+                                    {(project.techStack || project.technologies || []).join(', ')}
                                 </div>
                             </div>
                             <div className="fade-in-later">
@@ -179,7 +179,7 @@ const ProjectDetails = ({ project }: Props) => {
                     className="fade-in-later relative flex flex-col gap-2 max-w-[800px] mx-auto"
                     id="images"
                 >
-                    {project.images.map((image) => (
+                    {(project.images || []).map((image) => (
                         <div
                             key={image}
                             className="group relative w-full aspect-[750/400] bg-background-light"
