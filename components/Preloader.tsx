@@ -258,36 +258,7 @@ const Preloader = () => {
 
     // Cleanup on unmount
     useEffect(() => {
-        // Add user interaction listeners to start audio
-        const handleUserInteraction = () => {
-            if (!audioStarted && audioRef.current) {
-                audioRef.current.play()
-                    .then(() => {
-                        setAudioStarted(true);
-                        gsap.to(audioRef.current, {
-                            volume: 0.3,
-                            duration: 2,
-                            ease: 'power2.inOut'
-                        });
-                    })
-                    .catch(() => {
-                        console.log('Audio still blocked after user interaction');
-                    });
-            }
-        };
-
-        // Listen for any user interaction
-        const events = ['click', 'keydown', 'touchstart', 'mousedown', 'scroll'];
-        events.forEach(event => {
-            document.addEventListener(event, handleUserInteraction, { once: true });
-        });
-
         return () => {
-            // Clean up event listeners
-            events.forEach(event => {
-                document.removeEventListener(event, handleUserInteraction);
-            });
-            
             // Clean up audio
             if (audioRef.current) {
                 audioRef.current.pause();
@@ -297,7 +268,7 @@ const Preloader = () => {
                 particlesRef.current.innerHTML = '';
             }
         };
-    }, [audioStarted]);
+    }, []);
 
     return (
         <div className="fixed inset-0 z-[6] flex bg-black overflow-hidden pointer-events-none" ref={preloaderRef}>
@@ -311,12 +282,76 @@ const Preloader = () => {
                 Your browser does not support the audio element.
             </audio>
 
-            {/* Audio status indicator */}
-            {!audioStarted && (
-                <div className="absolute bottom-4 right-4 text-white/50 text-xs pointer-events-auto">
-                    Click anywhere to enable audio
-                </div>
-            )}
+            {/* Sound Symbol Button */}
+            <div className="absolute top-6 right-6 pointer-events-auto z-10">
+                <button
+                    onClick={() => {
+                        console.log('Sound button clicked!');
+                        if (!audioStarted && audioRef.current) {
+                            console.log('Attempting to start audio...');
+                            audioRef.current.play()
+                                .then(() => {
+                                    console.log('Audio started successfully!');
+                                    setAudioStarted(true);
+                                    gsap.to(audioRef.current, {
+                                        volume: 0.3,
+                                        duration: 2,
+                                        ease: 'power2.inOut'
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.log('Audio failed to start:', error);
+                                });
+                        } else if (audioStarted && audioRef.current) {
+                            console.log('Muting audio...');
+                            audioRef.current.pause();
+                            setAudioStarted(false);
+                        }
+                    }}
+                    className="group relative w-12 h-12 bg-black/20 hover:bg-black/30 backdrop-blur-md border border-white/20 hover:border-white/30 rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer"
+                    style={{ zIndex: 100 }}
+                >
+                    {/* Sound On Icon */}
+                    {audioStarted ? (
+                        <svg 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                            className="text-white transition-all duration-300 group-hover:scale-110"
+                        >
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="m19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    ) : (
+                        /* Sound Off Icon */
+                        <svg 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                            className="text-white/80 transition-all duration-300 group-hover:scale-110"
+                        >
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <line x1="23" y1="9" x2="17" y2="15"></line>
+                            <line x1="17" y1="9" x2="23" y2="15"></line>
+                        </svg>
+                    )}
+                    
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-black/80 backdrop-blur-sm text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none transform translate-y-1 group-hover:translate-y-0">
+                        {audioStarted ? 'Mute' : 'Unmute'}
+                    </div>
+                </button>
+            </div>
 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
                 <p 
