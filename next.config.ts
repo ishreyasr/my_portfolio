@@ -1,5 +1,3 @@
-declare const module: any;
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     trailingSlash: true,
