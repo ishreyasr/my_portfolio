@@ -36,15 +36,17 @@ export default async function ProjectPage({ params }: Props) {
 
     return (
         <main className="pt-header">
-            <div className="container">
+            <div className="px-6 sm:px-8 lg:px-12 mb-16 mt-8">
                 <TransitionLink
                     href="/#selected-projects"
-                    className="inline-flex items-center gap-2 text-muted-foreground hover:text-white mb-10"
+                    className="inline-flex items-center gap-3 text-muted-foreground hover:text-white transition-colors duration-200 group"
                 >
-                    <ArrowLeft size={20} />
-                    Back to projects
+                    <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform duration-200" />
+                    <span className="text-lg">Back to projects</span>
                 </TransitionLink>
-
+            </div>
+            
+            <div className="container">
                 <div className="max-w-3xl">
                     <h1 className="text-4xl sm:text-5xl font-anton mb-5">
                         {project.title}

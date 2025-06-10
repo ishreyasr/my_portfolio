@@ -44,22 +44,24 @@ const Experiences = () => {
             <div className="container" ref={containerRef}>
                 <SectionTitle title="My Experience" />
 
-                <div className="grid gap-14">
+                <div className="group/experiences grid gap-14">
                     {MY_EXPERIENCE.map((item) => (
                         <div 
                             key={item.title} 
-                            className="experience-item transition-all duration-300 cursor-pointer"
+                            className={`experience-item transition-all duration-300 cursor-pointer group ${
+                                hoveredExperience && hoveredExperience !== item.title
+                                    ? 'opacity-30 scale-95 blur-[1px]'
+                                    : hoveredExperience === item.title
+                                    ? 'opacity-100 scale-105'
+                                    : 'opacity-100 scale-100'
+                            }`}
                             onMouseEnter={() => handleExperienceHover(item.title)}
                             onMouseLeave={handleExperienceLeave}
                         >
                             <p className="text-xl text-muted-foreground">
                                 {item.company}
                             </p>
-                            <p className={`text-5xl font-anton leading-none mt-3.5 mb-2.5 transition-all duration-300 ${
-                                hoveredExperience === item.title
-                                    ? 'text-primary'
-                                    : 'text-foreground'
-                            }`}>
+                            <p className="text-5xl font-anton leading-none mt-3.5 mb-2.5 transition-all duration-700 bg-gradient-to-r from-primary to-foreground from-[50%] to-[50%] bg-[length:200%] bg-right bg-clip-text text-transparent group-hover:bg-left">
                                 {item.title}
                             </p>
                             <p className="text-lg text-muted-foreground">

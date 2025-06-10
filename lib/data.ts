@@ -37,6 +37,10 @@ export const MY_STACK = {
     ],
     frontend: [
         {
+            name: 'HTML',
+            icon: '/logo/html.png',
+        },
+        {
             name: 'Javascript',
             icon: '/logo/js.png',
         },

@@ -13,13 +13,76 @@ const Preloader = () => {
     const preloaderRef = useRef<HTMLDivElement>(null);
     const particlesRef = useRef<HTMLDivElement>(null);
     const nameRef = useRef<HTMLParagraphElement>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
     const [displayText, setDisplayText] = useState<string[]>(Array(7).fill(''));
+    const [audioStarted, setAudioStarted] = useState(false);
+
+    // Function to start background music
+    const startBackgroundMusic = () => {
+        if (audioRef.current && !audioStarted) {
+            audioRef.current.volume = 0.3;
+            audioRef.current.loop = true;
+            
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        setAudioStarted(true);
+                        gsap.to(audioRef.current, {
+                            volume: 0.3,
+                            duration: 2,
+                            ease: 'power2.inOut'
+                        });
+                    })
+                    .catch((error) => {
+                        console.log('Audio failed to start:', error);
+                        // Try again after a short delay
+                        setTimeout(() => {
+                            if (!audioStarted && audioRef.current) {
+                                audioRef.current.play()
+                                    .then(() => {
+                                        setAudioStarted(true);
+                                        gsap.to(audioRef.current, {
+                                            volume: 0.3,
+                                            duration: 2,
+                                            ease: 'power2.inOut'
+                                        });
+                                    })
+                                    .catch(() => {
+                                        console.log('Audio still blocked, waiting for user interaction');
+                                    });
+                            }
+                        }, 500);
+                    });
+            }
+        }
+    };
+
+    // Function to fade out background music
+    const fadeOutBackgroundMusic = () => {
+        if (audioRef.current) {
+            gsap.to(audioRef.current, {
+                volume: 0,
+                duration: 1.5,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    if (audioRef.current) {
+                        audioRef.current.pause();
+                        audioRef.current.currentTime = 0;
+                    }
+                }
+            });
+        }
+    };
 
     // Function to get random mysterious symbol
     const getRandomSymbol = () => MYSTERIOUS_SYMBOLS[Math.floor(Math.random() * MYSTERIOUS_SYMBOLS.length)];
 
     // Function to create mysterious symbol effect
     const startMysteriousEffect = () => {
+        // Start background music when symbols first appear
+        startBackgroundMusic();
+
         let iterations = 0;
         const maxIterations = 30;
         const interval = 100;
@@ -96,13 +159,16 @@ const Preloader = () => {
             if (revealIterations >= maxRevealIterations) {
                 clearInterval(revealInterval);
                 setDisplayText(FINAL_NAME.split(''));
-                setTimeout(startUniqueOutro, 1000);
+                startUniqueOutro();
             }
         }, 100);
     };
 
     // Function to create unique outro
     const startUniqueOutro = () => {
+        // Start fading out background music
+        fadeOutBackgroundMusic();
+
         // Create a wave of particles that sweep across the screen
         const createWaveParticles = () => {
             const particles = [];
@@ -184,25 +250,75 @@ const Preloader = () => {
                 opacity: 0.8
             });
 
+            // Start the mysterious effect immediately when component loads
             startMysteriousEffect();
         },
         { scope: preloaderRef },
     );
 
-    // Cleanup particles on unmount
+    // Cleanup on unmount
     useEffect(() => {
+        // Add user interaction listeners to start audio
+        const handleUserInteraction = () => {
+            if (!audioStarted && audioRef.current) {
+                audioRef.current.play()
+                    .then(() => {
+                        setAudioStarted(true);
+                        gsap.to(audioRef.current, {
+                            volume: 0.3,
+                            duration: 2,
+                            ease: 'power2.inOut'
+                        });
+                    })
+                    .catch(() => {
+                        console.log('Audio still blocked after user interaction');
+                    });
+            }
+        };
+
+        // Listen for any user interaction
+        const events = ['click', 'keydown', 'touchstart', 'mousedown', 'scroll'];
+        events.forEach(event => {
+            document.addEventListener(event, handleUserInteraction, { once: true });
+        });
+
         return () => {
+            // Clean up event listeners
+            events.forEach(event => {
+                document.removeEventListener(event, handleUserInteraction);
+            });
+            
+            // Clean up audio
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
             if (particlesRef.current) {
                 particlesRef.current.innerHTML = '';
             }
         };
-    }, []);
+    }, [audioStarted]);
 
     return (
-        <div className="fixed inset-0 z-[6] flex bg-black overflow-hidden" ref={preloaderRef}>
-            <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
+        <div className="fixed inset-0 z-[6] flex bg-black overflow-hidden pointer-events-none" ref={preloaderRef}>
+            {/* Background Music */}
+            <audio 
+                ref={audioRef}
+                preload="auto"
+                className="hidden"
+            >
+                <source src="/audio/bgm.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
 
-            <div className="absolute inset-0 flex items-center justify-center">
+            {/* Audio status indicator */}
+            {!audioStarted && (
+                <div className="absolute bottom-4 right-4 text-white/50 text-xs pointer-events-auto">
+                    Click anywhere to enable audio
+                </div>
+            )}
+
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
                 <p 
                     ref={nameRef}
                     className="name-text flex items-center justify-center text-[20vw] lg:text-[200px] font-anton leading-none overflow-hidden text-primary"
@@ -226,6 +342,8 @@ const Preloader = () => {
                     ))}
                 </p>
             </div>
+
+            <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
         </div>
     );
 };
