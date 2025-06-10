@@ -130,7 +130,7 @@ const Navbar = () => {
                                 </p>
                             </div>
                             <ul className="space-y-5">
-                                {SOCIAL_LINKS.map((link, _index) => {
+                                {SOCIAL_LINKS.map((link) => {
                                     const iconPath = getSocialIcon(link.name);
                                     return (
                                         <li key={link.name} className="group">
@@ -173,7 +173,7 @@ const Navbar = () => {
                                 </p>
                             </div>
                             <ul className="space-y-5">
-                                {MENU_LINKS.map((link, _idx) => {
+                                {MENU_LINKS.map((link) => {
                                     const iconPath = getMenuIcon(link.name);
                                     return (
                                         <li key={link.name} className="group">
