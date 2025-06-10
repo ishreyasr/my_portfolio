@@ -8,7 +8,7 @@ interface RepoStats {
 }
 
 interface FooterStatsProps {
-    children: (stats: RepoStats) => ReactNode;
+    children: (_stats: RepoStats) => ReactNode;
 }
 
 export default function FooterStats({ children }: FooterStatsProps) {

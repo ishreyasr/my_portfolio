@@ -9,7 +9,7 @@ interface RepoStats {
 }
 
 interface FooterProps {
-    repoStats: RepoStats;
+    repoStats?: RepoStats;
 }
 
 const Footer = ({ repoStats }: FooterProps) => {
