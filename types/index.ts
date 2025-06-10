@@ -27,4 +27,11 @@ export interface IProject {
     liveLink: string;
     githubLink: string;
     featured: boolean;
+    // Additional properties used in ProjectDetails
+    sourceCode?: string;
+    liveUrl?: string;
+    year?: string;
+    techStack?: string[];
+    role?: string;
+    images?: string[];
 }

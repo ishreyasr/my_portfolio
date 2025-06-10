@@ -4,7 +4,6 @@ import { MY_STACK } from '../../lib/data';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import Image from 'next/image';
 import React, { useRef } from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
