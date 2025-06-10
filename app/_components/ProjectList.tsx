@@ -1,12 +1,10 @@
 'use client';
 import SectionTitle from '../../components/SectionTitle';
 import { PROJECTS } from '../../lib/data';
-import { cn } from '../../lib/utils';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import Image from 'next/image';
-import React, { useRef, useState, MouseEvent, useEffect } from 'react';
+import React, { useRef } from 'react';
 import Project from './Project';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -14,68 +12,6 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const ProjectList = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const projectListRef = useRef<HTMLDivElement>(null);
-    // const imageContainer = useRef<HTMLDivElement>(null);
-    // const imageRef = useRef<HTMLImageElement>(null);
-    // const [selectedProject, setSelectedProject] = useState<string | null>(
-    //     PROJECTS[0].slug,
-    // );
-    const [isMobile, setIsMobile] = useState(false);
-
-    // Check if mobile on mount and window resize
-    useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
-            // if (window.innerWidth < 768) {
-            //     setSelectedProject(null);
-            // }
-        };
-
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-
-    // update imageRef.current href based on the cursor hover position
-    // also update image position
-    // useGSAP(
-    //     (context, contextSafe) => {
-    //         if (isMobile) return;
-
-    //         const handleMouseMove = contextSafe?.((e: MouseEvent) => {
-    //             if (!containerRef.current || !imageContainer.current) return;
-
-    //             const containerRect = containerRef.current.getBoundingClientRect();
-    //             const imageRect = imageContainer.current.getBoundingClientRect();
-    //             const offsetTop = e.clientY - containerRect.y;
-
-    //             // if cursor is outside the container, hide the image
-    //             if (
-    //                 containerRect.y > e.clientY ||
-    //                 containerRect.bottom < e.clientY ||
-    //                 containerRect.x > e.clientX ||
-    //                 containerRect.right < e.clientX
-    //             ) {
-    //                 return gsap.to(imageContainer.current, {
-    //                     duration: 0.3,
-    //                     opacity: 0,
-    //                 });
-    //             }
-
-    //             gsap.to(imageContainer.current, {
-    //                 y: offsetTop - imageRect.height / 2,
-    //                 duration: 1,
-    //                 opacity: 1,
-    //             });
-    //         }) as any;
-
-    //         window.addEventListener('mousemove', handleMouseMove);
-
-    //         return () => {
-    //             window.removeEventListener('mousemove', handleMouseMove);
-    //         };
-    //     },
-    //     { scope: containerRef, dependencies: [isMobile] },
-    // );
 
     useGSAP(
         () => {
@@ -99,11 +35,6 @@ const ProjectList = () => {
         { scope: containerRef },
     );
 
-    // const handleMouseEnter = (slug: string) => {
-    //     if (isMobile) return;
-    //     setSelectedProject(slug);
-    // };
-
     return (
         <section className="pb-section" id="selected-projects">
             <div className="container">
@@ -111,31 +42,6 @@ const ProjectList = () => {
 
                 <div className="group/projects relative" ref={containerRef}>
                     {/* Image preview functionality commented out - can be re-enabled in future */}
-                    {/* {!isMobile && selectedProject !== null && (
-                        <div
-                            className="absolute right-0 top-0 z-[1] pointer-events-none w-[200px] xl:w-[350px] aspect-[3/4] overflow-hidden opacity-0"
-                            ref={imageContainer}
-                        >
-                            {PROJECTS.map((project) => (
-                                <Image
-                                    src={project.thumbnail}
-                                    alt={project.title}
-                                    width={400}
-                                    height={500}
-                                    className={cn(
-                                        'absolute inset-0 transition-all duration-500 w-full h-full object-cover',
-                                        {
-                                            'opacity-0':
-                                                project.slug !== selectedProject,
-                                        },
-                                    )}
-                                    ref={imageRef}
-                                    key={project.slug}
-                                    priority={project.slug === selectedProject}
-                                />
-                            ))}
-                        </div>
-                    )} */}
 
                     <div
                         className="flex flex-col max-md:gap-10"
@@ -145,7 +51,6 @@ const ProjectList = () => {
                             <Project
                                 index={index}
                                 project={project}
-                                selectedProject={null}
                                 onMouseEnter={() => {}}
                                 key={project.slug}
                             />

@@ -24,7 +24,7 @@ async function getRepoStats(): Promise<RepoStats> {
     return repoStats.json();
 }
 
-export default async function FooterStats({ children }: FooterStatsProps) {
-    const stats = await getRepoStats();
-    return <>{children(stats)}</>;
+export default function FooterStats({ children }: FooterStatsProps) {
+    const statsPromise = getRepoStats();
+    return <>{children({ stargazers_count: 0, forks_count: 0 })}</>;
 } 

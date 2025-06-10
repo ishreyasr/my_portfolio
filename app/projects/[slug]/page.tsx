@@ -23,13 +23,12 @@ export const generateMetadata = async ({
 };
 
 interface Props {
-    params: {
-        slug: string;
-    };
+    params: Promise<{ slug: string }>;
 }
 
-export default function ProjectPage({ params }: Props) {
-    const project = PROJECTS.find((p) => p.slug === params.slug);
+export default async function ProjectPage({ params }: Props) {
+    const { slug } = await params;
+    const project = PROJECTS.find((p) => p.slug === slug);
 
     if (!project) {
         notFound();

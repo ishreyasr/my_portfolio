@@ -7,7 +7,6 @@ import { useRef } from 'react';
 interface Props {
     index: number;
     project: IProject;
-    selectedProject: string | null;
     onMouseEnter: (_slug: string) => void;
 }
 
@@ -28,7 +27,7 @@ interface Props {
 
 gsap.registerPlugin(useGSAP);
 
-const Project = ({ index, project, selectedProject, onMouseEnter }: Props) => {
+const Project = ({ index, project, onMouseEnter }: Props) => {
     const externalLinkSVGRef = useRef<SVGSVGElement>(null);
 
     const { context, contextSafe } = useGSAP(() => {}, {
