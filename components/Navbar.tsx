@@ -6,13 +6,6 @@ import { useRouter } from 'next/navigation';
 import { GENERAL_INFO, SOCIAL_LINKS } from '@/lib/data';
 import Image from 'next/image';
 
-const COLORS = [
-    'bg-yellow-500 text-black',
-    'bg-blue-500 text-white',
-    'bg-teal-500 text-black',
-    'bg-indigo-500 text-white',
-];
-
 const MENU_LINKS = [
     {
         name: 'Home',
@@ -137,7 +130,7 @@ const Navbar = () => {
                                 </p>
                             </div>
                             <ul className="space-y-5">
-                                {SOCIAL_LINKS.map((link, index) => {
+                                {SOCIAL_LINKS.map((link, _index) => {
                                     const iconPath = getSocialIcon(link.name);
                                     return (
                                         <li key={link.name} className="group">
@@ -180,7 +173,7 @@ const Navbar = () => {
                                 </p>
                             </div>
                             <ul className="space-y-5">
-                                {MENU_LINKS.map((link, idx) => {
+                                {MENU_LINKS.map((link, _idx) => {
                                     const iconPath = getMenuIcon(link.name);
                                     return (
                                         <li key={link.name} className="group">
