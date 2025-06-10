@@ -14,20 +14,20 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const ProjectList = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const projectListRef = useRef<HTMLDivElement>(null);
-    const imageContainer = useRef<HTMLDivElement>(null);
-    const imageRef = useRef<HTMLImageElement>(null);
-    const [selectedProject, setSelectedProject] = useState<string | null>(
-        PROJECTS[0].slug,
-    );
+    // const imageContainer = useRef<HTMLDivElement>(null);
+    // const imageRef = useRef<HTMLImageElement>(null);
+    // const [selectedProject, setSelectedProject] = useState<string | null>(
+    //     PROJECTS[0].slug,
+    // );
     const [isMobile, setIsMobile] = useState(false);
 
     // Check if mobile on mount and window resize
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
-            if (window.innerWidth < 768) {
-                setSelectedProject(null);
-            }
+            // if (window.innerWidth < 768) {
+            //     setSelectedProject(null);
+            // }
         };
 
         checkMobile();
@@ -37,45 +37,45 @@ const ProjectList = () => {
 
     // update imageRef.current href based on the cursor hover position
     // also update image position
-    useGSAP(
-        (context, contextSafe) => {
-            if (isMobile) return;
+    // useGSAP(
+    //     (context, contextSafe) => {
+    //         if (isMobile) return;
 
-            const handleMouseMove = contextSafe?.((e: MouseEvent) => {
-                if (!containerRef.current || !imageContainer.current) return;
+    //         const handleMouseMove = contextSafe?.((e: MouseEvent) => {
+    //             if (!containerRef.current || !imageContainer.current) return;
 
-                const containerRect = containerRef.current.getBoundingClientRect();
-                const imageRect = imageContainer.current.getBoundingClientRect();
-                const offsetTop = e.clientY - containerRect.y;
+    //             const containerRect = containerRef.current.getBoundingClientRect();
+    //             const imageRect = imageContainer.current.getBoundingClientRect();
+    //             const offsetTop = e.clientY - containerRect.y;
 
-                // if cursor is outside the container, hide the image
-                if (
-                    containerRect.y > e.clientY ||
-                    containerRect.bottom < e.clientY ||
-                    containerRect.x > e.clientX ||
-                    containerRect.right < e.clientX
-                ) {
-                    return gsap.to(imageContainer.current, {
-                        duration: 0.3,
-                        opacity: 0,
-                    });
-                }
+    //             // if cursor is outside the container, hide the image
+    //             if (
+    //                 containerRect.y > e.clientY ||
+    //                 containerRect.bottom < e.clientY ||
+    //                 containerRect.x > e.clientX ||
+    //                 containerRect.right < e.clientX
+    //             ) {
+    //                 return gsap.to(imageContainer.current, {
+    //                     duration: 0.3,
+    //                     opacity: 0,
+    //                 });
+    //             }
 
-                gsap.to(imageContainer.current, {
-                    y: offsetTop - imageRect.height / 2,
-                    duration: 1,
-                    opacity: 1,
-                });
-            }) as any;
+    //             gsap.to(imageContainer.current, {
+    //                 y: offsetTop - imageRect.height / 2,
+    //                 duration: 1,
+    //                 opacity: 1,
+    //             });
+    //         }) as any;
 
-            window.addEventListener('mousemove', handleMouseMove);
+    //         window.addEventListener('mousemove', handleMouseMove);
 
-            return () => {
-                window.removeEventListener('mousemove', handleMouseMove);
-            };
-        },
-        { scope: containerRef, dependencies: [isMobile] },
-    );
+    //         return () => {
+    //             window.removeEventListener('mousemove', handleMouseMove);
+    //         };
+    //     },
+    //     { scope: containerRef, dependencies: [isMobile] },
+    // );
 
     useGSAP(
         () => {
@@ -99,10 +99,10 @@ const ProjectList = () => {
         { scope: containerRef },
     );
 
-    const handleMouseEnter = (slug: string) => {
-        if (isMobile) return;
-        setSelectedProject(slug);
-    };
+    // const handleMouseEnter = (slug: string) => {
+    //     if (isMobile) return;
+    //     setSelectedProject(slug);
+    // };
 
     return (
         <section className="pb-section" id="selected-projects">
@@ -110,7 +110,8 @@ const ProjectList = () => {
                 <SectionTitle title="SELECTED PROJECTS" />
 
                 <div className="group/projects relative" ref={containerRef}>
-                    {!isMobile && selectedProject !== null && (
+                    {/* Image preview functionality commented out - can be re-enabled in future */}
+                    {/* {!isMobile && selectedProject !== null && (
                         <div
                             className="absolute right-0 top-0 z-[1] pointer-events-none w-[200px] xl:w-[350px] aspect-[3/4] overflow-hidden opacity-0"
                             ref={imageContainer}
@@ -134,7 +135,7 @@ const ProjectList = () => {
                                 />
                             ))}
                         </div>
-                    )}
+                    )} */}
 
                     <div
                         className="flex flex-col max-md:gap-10"
@@ -144,8 +145,8 @@ const ProjectList = () => {
                             <Project
                                 index={index}
                                 project={project}
-                                selectedProject={selectedProject}
-                                onMouseEnter={handleMouseEnter}
+                                selectedProject={null}
+                                onMouseEnter={() => {}}
                                 key={project.slug}
                             />
                         ))}
