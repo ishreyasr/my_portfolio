@@ -19,49 +19,6 @@ const Preloader = () => {
     const [userMuted, setUserMuted] = useState(false);
     const [initialAudioAttempted, setInitialAudioAttempted] = useState(false);
 
-    // Function to start background music
-    const startBackgroundMusic = () => {
-        if (audioRef.current && !userMuted) {
-            audioRef.current.volume = 0.3;
-            audioRef.current.loop = true;
-            
-            const playPromise = audioRef.current.play();
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        setAudioStarted(true);
-                        gsap.to(audioRef.current, {
-                            volume: 0.3,
-                            duration: 2,
-                            ease: 'power2.inOut'
-                        });
-                    })
-                    .catch((error) => {
-                        console.log('Audio failed to start:', error);
-                        setAudioStarted(false);
-                        // Try again after a short delay
-                        setTimeout(() => {
-                            if (audioRef.current && !userMuted) {
-                                audioRef.current.play()
-                                    .then(() => {
-                                        setAudioStarted(true);
-                                        gsap.to(audioRef.current, {
-                                            volume: 0.3,
-                                            duration: 2,
-                                            ease: 'power2.inOut'
-                                        });
-                                    })
-                                    .catch(() => {
-                                        console.log('Audio still blocked, waiting for user interaction');
-                                        setAudioStarted(false);
-                                    });
-                            }
-                        }, 500);
-                    });
-            }
-        }
-    };
-
     // Function to fade out background music
     const fadeOutBackgroundMusic = () => {
         if (audioRef.current && audioStarted && !userMuted) {
