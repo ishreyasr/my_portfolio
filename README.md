@@ -178,15 +178,17 @@ pnpm svgr:icons   # Generate React components from SVGs
 
 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under a Custom License - All Rights Reserved. See the LICENSE file for details.
 
-However, before copying, reproducing, or using any part of this portfolio (including design, code, animations, or content), you must:
+Before copying, reproducing, or using any part of this portfolio (including design, code, animations, or content), you must:
 
 1. Obtain explicit written consent from the creator (Shreyas R)
 2. Provide proper attribution and creator credits in your project
 3. Include a link back to the original portfolio: shrey16.vercel.app
 
-Failure to comply with these requirements will result in the revocation of the MIT license for your use case.
+Failure to comply with these requirements will result in the revocation of any granted permissions and may result in legal action.
+
+For permission requests, contact: ishreyasr@gmail.com
 
 📞 Contact
 
