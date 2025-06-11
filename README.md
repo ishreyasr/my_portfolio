@@ -65,7 +65,7 @@ Setup Instructions
 
 1. Clone the repository
    ```bash
-   git clone <your-repo-url>
+   git clone <https://github.com/shreyas162004/my_portfolio.git>
    cd portfolio-2.0
    ```
 
@@ -191,8 +191,8 @@ Failure to comply with these requirements will result in the revocation of the M
 📞 Contact
 
 - Portfolio: shrey16.vercel.app
-- GitHub: Your GitHub Profile
-- LinkedIn: Your LinkedIn Profile
+- Gmail: ishreyasr@gmail.com 
+- LinkedIn: www.linkedin.com/in/shreyu/
 
 ---
 
