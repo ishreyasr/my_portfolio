@@ -15,11 +15,13 @@ const Preloader = () => {
     const nameRef = useRef<HTMLParagraphElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
     const [displayText, setDisplayText] = useState<string[]>(Array(7).fill(''));
-    const [audioStarted, setAudioStarted] = useState(false);
+    const [audioStarted, setAudioStarted] = useState(true);
+    const [userMuted, setUserMuted] = useState(false);
+    const [initialAudioAttempted, setInitialAudioAttempted] = useState(false);
 
     // Function to start background music
     const startBackgroundMusic = () => {
-        if (audioRef.current && !audioStarted) {
+        if (audioRef.current && !userMuted) {
             audioRef.current.volume = 0.3;
             audioRef.current.loop = true;
             
@@ -36,9 +38,10 @@ const Preloader = () => {
                     })
                     .catch((error) => {
                         console.log('Audio failed to start:', error);
+                        setAudioStarted(false);
                         // Try again after a short delay
                         setTimeout(() => {
-                            if (!audioStarted && audioRef.current) {
+                            if (audioRef.current && !userMuted) {
                                 audioRef.current.play()
                                     .then(() => {
                                         setAudioStarted(true);
@@ -50,6 +53,7 @@ const Preloader = () => {
                                     })
                                     .catch(() => {
                                         console.log('Audio still blocked, waiting for user interaction');
+                                        setAudioStarted(false);
                                     });
                             }
                         }, 500);
@@ -60,7 +64,7 @@ const Preloader = () => {
 
     // Function to fade out background music
     const fadeOutBackgroundMusic = () => {
-        if (audioRef.current) {
+        if (audioRef.current && audioStarted && !userMuted) {
             gsap.to(audioRef.current, {
                 volume: 0,
                 duration: 1.5,
@@ -80,9 +84,6 @@ const Preloader = () => {
 
     // Function to create mysterious symbol effect
     const startMysteriousEffect = () => {
-        // Start background music when symbols first appear
-        startBackgroundMusic();
-
         let iterations = 0;
         const maxIterations = 30;
         const interval = 100;
@@ -270,6 +271,60 @@ const Preloader = () => {
         };
     }, []);
 
+    // Handle initial audio state
+    useEffect(() => {
+        // Try to start audio immediately when component mounts
+        const startInitialAudio = () => {
+            if (audioRef.current && !initialAudioAttempted && !userMuted) {
+                setInitialAudioAttempted(true);
+                audioRef.current.volume = 0.3;
+                audioRef.current.loop = true;
+                
+                const playPromise = audioRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            console.log('Initial audio started successfully');
+                            setAudioStarted(true);
+                        })
+                        .catch((error) => {
+                            console.log('Initial audio start failed:', error);
+                            // Don't set audioStarted to false here, keep it as true for unmuted state
+                            // The audio will start when user interacts
+                        });
+                }
+            }
+        };
+
+        // Start audio after a small delay to ensure component is fully mounted
+        const timer = setTimeout(startInitialAudio, 100);
+        
+        return () => clearTimeout(timer);
+    }, [initialAudioAttempted, userMuted]);
+
+    // Add a click handler to start audio on first user interaction
+    useEffect(() => {
+        const handleFirstClick = () => {
+            if (audioRef.current && !userMuted && !audioStarted) {
+                audioRef.current.play()
+                    .then(() => {
+                        console.log('Audio started on first user interaction');
+                        setAudioStarted(true);
+                    })
+                    .catch((error) => {
+                        console.log('Audio failed to start on user interaction:', error);
+                    });
+            }
+        };
+
+        // Add event listener for first user interaction
+        document.addEventListener('click', handleFirstClick, { once: true });
+        
+        return () => {
+            document.removeEventListener('click', handleFirstClick);
+        };
+    }, [userMuted, audioStarted]);
+
     return (
         <div className="fixed inset-0 z-[6] flex bg-black overflow-hidden pointer-events-none" ref={preloaderRef}>
             {/* Background Music */}
@@ -287,11 +342,13 @@ const Preloader = () => {
                 <button
                     onClick={() => {
                         console.log('Sound button clicked!');
-                        if (!audioStarted && audioRef.current) {
-                            console.log('Attempting to start audio...');
+                        if (userMuted && audioRef.current) {
+                            // User wants to unmute
+                            console.log('Attempting to unmute audio...');
+                            setUserMuted(false);
                             audioRef.current.play()
                                 .then(() => {
-                                    console.log('Audio started successfully!');
+                                    console.log('Audio unmuted successfully!');
                                     setAudioStarted(true);
                                     gsap.to(audioRef.current, {
                                         volume: 0.3,
@@ -300,19 +357,40 @@ const Preloader = () => {
                                     });
                                 })
                                 .catch((error) => {
-                                    console.log('Audio failed to start:', error);
+                                    console.log('Audio failed to unmute:', error);
+                                    // Keep audioStarted as true since user wants it unmuted
                                 });
-                        } else if (audioStarted && audioRef.current) {
+                        } else if (!userMuted && audioRef.current && !audioStarted) {
+                            // User clicked unmute but audio hasn't started yet
+                            console.log('Starting audio on unmute click...');
+                            audioRef.current.play()
+                                .then(() => {
+                                    console.log('Audio started on unmute click!');
+                                    setAudioStarted(true);
+                                    gsap.to(audioRef.current, {
+                                        volume: 0.3,
+                                        duration: 2,
+                                        ease: 'power2.inOut'
+                                    });
+                                })
+                                .catch((error) => {
+                                    console.log('Audio failed to start on unmute click:', error);
+                                });
+                        } else {
+                            // User wants to mute
                             console.log('Muting audio...');
-                            audioRef.current.pause();
-                            setAudioStarted(false);
+                            setUserMuted(true);
+                            if (audioRef.current) {
+                                audioRef.current.pause();
+                                setAudioStarted(false);
+                            }
                         }
                     }}
                     className="group relative w-12 h-12 bg-black/20 hover:bg-black/30 backdrop-blur-md border border-white/20 hover:border-white/30 rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer"
                     style={{ zIndex: 100 }}
                 >
                     {/* Sound On Icon */}
-                    {audioStarted ? (
+                    {!userMuted ? (
                         <svg 
                             width="20" 
                             height="20" 
@@ -348,7 +426,7 @@ const Preloader = () => {
                     
                     {/* Tooltip */}
                     <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-black/80 backdrop-blur-sm text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none transform translate-y-1 group-hover:translate-y-0">
-                        {audioStarted ? 'Mute' : 'Unmute'}
+                        {!userMuted ? 'Mute' : 'Unmute'}
                     </div>
                 </button>
             </div>

@@ -11,9 +11,9 @@ export const GENERAL_INFO = {
 };
 
 export const SOCIAL_LINKS = [
-    { name: 'github', url: 'https://github.com/shreyas162004' },
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/shreyu' },
-    { name: 'instagram', url: 'https://www.instagram.com/shreyas_chinnu16' }
+    { name: 'GitHub', url: 'https://github.com/shreyas162004' },
+    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/shreyu' },
+    { name: 'Instagram', url: 'https://www.instagram.com/shreyas_chinnu16' }
 ];
 
 export const MY_STACK = {
