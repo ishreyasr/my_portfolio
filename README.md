@@ -4,7 +4,7 @@ A modern, interactive portfolio website built with Next.js 15, featuring stunnin
 
 🌐 Live Demo
 
-Visit the live site: shrey16.vercel.app
+Visit the live site: https://shrey16.vercel.app/
 
 ✨ Features
 
