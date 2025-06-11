@@ -190,7 +190,7 @@ Failure to comply with these requirements will result in the revocation of the M
 
 📞 Contact
 
-- Portfolio: shrey16.vercel.app
+- Portfolio: https://shrey16.vercel.app/
 - Gmail: ishreyasr@gmail.com 
 - LinkedIn: www.linkedin.com/in/shreyu/
 
