@@ -193,7 +193,6 @@ For permission requests, contact: ishreyasr@gmail.com
 📞 Contact
 
 - Portfolio: https://shrey16.vercel.app/
-- Gmail: ishreyasr@gmail.com 
 - LinkedIn: www.linkedin.com/in/shreyu/
 
 ---
