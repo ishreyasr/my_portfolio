@@ -4,7 +4,7 @@ A modern, interactive portfolio website built with Next.js 15, featuring stunnin
 
 🌐 Live Demo
 
-Visit the live site: shrey16.vercel.app
+Visit the live site: https://shrey16.vercel.app/
 
 ✨ Features
 
@@ -65,7 +65,7 @@ Setup Instructions
 
 1. Clone the repository
    ```bash
-   git clone <your-repo-url>
+   git clone <https://github.com/shreyas162004/my_portfolio.git>
    cd portfolio-2.0
    ```
 
@@ -192,9 +192,9 @@ For permission requests, contact: ishreyasr@gmail.com
 
 📞 Contact
 
-- Portfolio: shrey16.vercel.app
-- GitHub: Your GitHub Profile
-- LinkedIn: Your LinkedIn Profile
+- Portfolio: https://shrey16.vercel.app/
+- Gmail: ishreyasr@gmail.com 
+- LinkedIn: www.linkedin.com/in/shreyu/
 
 ---
 
