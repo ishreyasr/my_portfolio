@@ -65,7 +65,7 @@ Setup Instructions
 
 1. Clone the repository
    ```bash
-   git clone <https://github.com/shreyas162004/my_portfolio.git>
+   git clone <https://github.com/ishreyasr/my_portfolio.git>
    cd portfolio-2.0
    ```
 

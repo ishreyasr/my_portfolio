@@ -13,7 +13,7 @@ const DEFAULT_STATS: RepoStats = {
 async function getRepoStats(): Promise<RepoStats> {
     try {
         const repoStats = await fetch(
-            'https://api.github.com/repos/ShreyasR/portfolio-2.0',
+            'https://api.github.com/repos/ishreyasr/portfolio-2.0',
             {
                 next: {
                     revalidate: 60 * 60, // 1 hour
